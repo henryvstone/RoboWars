@@ -48,6 +48,9 @@
   <ItemGroup>
      <Compile Include="Assets\Camera Manipulation\BuildModeControls.cs" />
      <Compile Include="Assets\Camera Manipulation\CameraRotator.cs" />
+     <Compile Include="Assets\Camera Manipulation\ConnectorControls.cs" />
+     <Compile Include="Assets\Camera Manipulation\ControlTypeManager.cs" />
+     <Compile Include="Assets\Camera Manipulation\PieceControls.cs" />
      <Compile Include="Assets\Robot Pieces\ConnectorGenerator.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/opt/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

@@ -8,19 +8,19 @@ The game is programmed in Unity with C#. While the game is in its extreem infanc
 
 <h2>How to play</h2>
 
-<b>Global Commands:</b>
-Arrow keys - Manipulate the view while in build mode.
+<b>Global Commands:</b> <br/>
+Arrow keys - Manipulate the view while in build mode. <br/>
 Tab - cycle through the two build modes, connector mode and piece mode.
 
-<b>Connector Mode:</b>
-Mouse - Toggle selection on indevidual piece connectors.
-A - Deselect all connectors.
+<b>Connector Mode:</b> <br/>
+Mouse - Toggle selection on indevidual piece connectors. <br/>
+A - Deselect all connectors. <br/>
 C - Connect two or more selected connectors at the first connector selected.
 
 <b>Piece Mode:</b>
-Right Mouse - Toggle selection on indevidual pieces.
-Left Mouse & Drag - Move around the selected pieces.
-A - Deselect all pieces.
+Right Mouse - Toggle selection on indevidual pieces. <br/>
+Left Mouse & Drag - Move around the selected pieces. <br/>
+A - Deselect all pieces. <br/>
 S - Apply physics to objects with selected pieces.
 
 <h2>Questions</h2>

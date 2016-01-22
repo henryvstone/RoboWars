@@ -17,11 +17,12 @@ Mouse - Toggle selection on indevidual piece connectors. <br/>
 A - Deselect all connectors. <br/>
 C - Connect two or more selected connectors at the first connector selected.
 
-<b>Piece Mode:</b> <br/>
+<b>Assembly Mode:</b> <br/>
 Right Mouse - Toggle selection on indevidual pieces. <br/>
 Left Mouse & Drag - Move around the selected pieces. <br/>
 A - Deselect all pieces. <br/>
-S - Apply physics to objects with selected pieces.
+S - Apply physics to objects with selected pieces. <br/>
+R - Rotate assembly 45degrees clockwise around the build center.
 
 <h2>Questions</h2>
 

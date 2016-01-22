@@ -17,7 +17,7 @@ Mouse - Toggle selection on indevidual piece connectors. <br/>
 A - Deselect all connectors. <br/>
 C - Connect two or more selected connectors at the first connector selected.
 
-<b>Piece Mode:</b>
+<b>Piece Mode:</b> <br/>
 Right Mouse - Toggle selection on indevidual pieces. <br/>
 Left Mouse & Drag - Move around the selected pieces. <br/>
 A - Deselect all pieces. <br/>

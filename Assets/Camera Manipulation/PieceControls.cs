@@ -4,17 +4,17 @@ using System.Collections;
 public class PieceControls : MonoBehaviour {
 	
 	// Use this for initialization
-	public Material connectorSelected;
-	public Material connectorDeselected;
+	public Material assembliesSelected;
+	public Material assembliesDeselected;
 	
-	public ArrayList connectors;
+	public ArrayList assemblies;
 	
-	ArrayList selectedConnectors;
+	ArrayList selectedAssemblies;
 	
 	// Use this for initialization
 	void Start () {
-		connectors = new ArrayList();
-		selectedConnectors = new ArrayList();
+        assemblies = new ArrayList();
+        selectedAssemblies = new ArrayList();
 	}
 	
 	// Update is called once per frame
@@ -24,59 +24,118 @@ public class PieceControls : MonoBehaviour {
 			RaycastHit rh = new RaycastHit ();
 			if (Physics.Raycast (ray, out rh)) {
 				if (rh.collider.tag.Equals ("Piece")) {
-					GameObject connector = rh.collider.gameObject;
-					if (selectedConnectors.Contains (connector)) {
-						selectedConnectors.Remove (connector);
-						connector.GetComponent<MeshRenderer> ().material = connectorDeselected;
-					} else {
-						selectedConnectors.Add (connector);
-						connector.GetComponent<MeshRenderer> ().material = connectorSelected;
-					}
+                    //check to make sure piece is a member of a wrapper
+                    if (rh.collider.gameObject.transform.parent != null)
+                    {
+                        GameObject wrapper = rh.collider.gameObject.transform.parent.gameObject;
+                        
+					    if (selectedAssemblies.Contains (wrapper)) {
+                            selectedAssemblies.Remove (wrapper);
+
+                            //apply material to all subobjetcs
+                            foreach(Transform child in wrapper.transform)
+                            {
+                                child.GetComponent<MeshRenderer>().material = assembliesDeselected;
+                            }
+                        } else {
+                            selectedAssemblies.Add (wrapper);
+
+                            //apply material to all subobjetcs
+                            foreach (Transform child in wrapper.transform)
+                            {
+                                child.GetComponent<MeshRenderer>().material = assembliesSelected;
+                            }
+                        }
+                    }
+					
 				}
 			}
 		}
 
 		if (Input.GetKeyDown (KeyCode.A)) {
-			clearSelections ();
+            if(selectedAssemblies.Count > 0)
+            {
+                clearSelections ();
+            }
+            else
+            {
+                fillSelections ();
+            }
+			
 		}
 
-		if (Input.GetKeyDown (KeyCode.S)) {
-			for (int i = 0; i < selectedConnectors.Count; i++) {
-				((GameObject)selectedConnectors [i]).GetComponent<Rigidbody> ().isKinematic = false;
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            for (int i = 0; i < selectedAssemblies.Count; i++)
+            {
+                ((GameObject)selectedAssemblies[i]).transform.Rotate(0, 45, 0);
+            }
+        }
+
+        if (Input.GetKeyDown (KeyCode.S)) {
+			for (int i = 0; i < selectedAssemblies.Count; i++) {
+                //apply physics to all subobjetcs
+                foreach (Transform child in ((GameObject)(selectedAssemblies[i])).transform)
+                {
+                    child.GetComponent<Rigidbody>().isKinematic = false;
+                }
 			}
 		}
 
+        //left mo
 		if (Input.GetMouseButton (1)) {
 			float angle = -GetComponent<CameraRotator>().angle;
 			float dist = GetComponent<CameraRotator>().distance;
 
 			float deltaX = Input.mousePosition.x - lastPosition.x;
-			for (int i = 0; i < selectedConnectors.Count; i++) {
-				((GameObject)selectedConnectors [i]).transform.Translate(Mathf.Cos(angle)*deltaX/1000*dist, 0, Mathf.Sin(angle)*deltaX/1000*dist);
-			}
+			for (int i = 0; i < selectedAssemblies.Count; i++) {
+                //move all subobjects globally
+                foreach (Transform child in ((GameObject)(selectedAssemblies[i])).transform)
+                {
+                    child.Translate(Mathf.Cos(angle) * deltaX / 1000 * dist, 0, Mathf.Sin(angle) * deltaX / 1000 * dist, Space.World);
+                }
+            }
 
 			float deltaY = Input.mousePosition.y - lastPosition.y;
-			for (int i = 0; i < selectedConnectors.Count; i++) {
-				((GameObject)selectedConnectors [i]).transform.Translate(0, deltaY/1000*dist, 0);
-			}
+			for (int i = 0; i < selectedAssemblies.Count; i++) {
+                //move all subobjects globally
+                foreach (Transform child in ((GameObject)(selectedAssemblies[i])).transform)
+                {
+                    child.Translate(0, deltaY / 1000 * dist, 0, Space.World);
+                }
+            }
 		}
 
 		lastPosition = Input.mousePosition;
 	}
 
 	Vector2 lastPosition;
-	
-	public void clearSelections(){
-		foreach(GameObject con in selectedConnectors){
-			con.GetComponent<MeshRenderer>().material = connectorDeselected;
-		}
-		selectedConnectors.Clear();
-	}
-	
-	public void disable(){
-		foreach (GameObject con in connectors) {
-			con.GetComponent<Collider> ().enabled = false;
-			con.GetComponent<MeshRenderer> ().enabled = false;
-		}
+
+    public void clearSelections()
+    {
+        foreach (GameObject wrapper in selectedAssemblies)
+        {
+            foreach (Transform child in wrapper.transform)
+            {
+                child.GetComponent<MeshRenderer>().material = assembliesDeselected;
+            }
+        }
+        selectedAssemblies.Clear();
+    }
+
+    public void fillSelections()
+    {
+        foreach (GameObject wrapper in selectedAssemblies)
+        {
+            foreach (Transform child in wrapper.transform)
+            {
+                child.GetComponent<MeshRenderer>().material = assembliesDeselected;
+            }
+        }
+        selectedAssemblies.Clear();
+    }
+
+    public void disable(){
+		
 	}
 }

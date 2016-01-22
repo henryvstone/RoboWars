@@ -9,6 +9,10 @@ public class ConnectorGenerator : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        GameObject Wrapper = new GameObject("Piece");
+
+        transform.SetParent(Wrapper.transform);
+
 		for (int i = 0; i < positionsToBeGenerated.Length; i++) {
 			GameObject c = (GameObject) Instantiate (ConnectorModel);
 			c.transform.parent = this.transform;

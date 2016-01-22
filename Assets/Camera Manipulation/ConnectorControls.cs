@@ -55,68 +55,51 @@ public class ConnectorControls : MonoBehaviour {
                     else
                     {
                         Vector3 distanceToNewLocation = baseConnector.transform.position - secondaryConnector.transform.position;
-					   
+
                         //move objects to coincide with the new attachment
-                        if (secondaryConnector.transform.parent.parent != null)
                         {
-                            GameObject oldWrapper = secondaryConnector.transform.parent.parent.gameObject;
-                            for (int a = 0; a < oldWrapper.transform.childCount; a++)
+                            GameObject oldWrapper1 = secondaryConnector.transform.parent.parent.gameObject;
+                            for (int a = 0; a < oldWrapper1.transform.childCount; a++)
                             {
-                                oldWrapper.transform.GetChild(a).Translate(distanceToNewLocation);
+                                oldWrapper1.transform.GetChild(a).Translate(distanceToNewLocation, Space.World);
                             }
-                        }
-                        else
-                        {
-                            secondaryConnector.transform.parent.Translate(distanceToNewLocation);
                         }
 
                             FixedJoint fj = baseConnector.transform.parent.gameObject.AddComponent<FixedJoint>();
 					    fj.connectedBody = secondaryConnector.transform.parent.gameObject.GetComponent<Rigidbody>();
 
+
                         //move the secondary object and all object in its old wrapper to the new Wrapper.
-                        if(secondaryConnector.transform.parent.parent != null)
-                        {
-                            GameObject oldWrapper = secondaryConnector.transform.parent.parent.gameObject;
+                        { 
+                            GameObject oldWrapper2 = secondaryConnector.transform.parent.parent.gameObject;
                             //move the base object and all object in its old wrapper to the new Wrapper.
-                            for (int a = 0; a < oldWrapper.transform.childCount; a++)
+                            for (int a = 0; a < oldWrapper2.transform.childCount; a++)
                             {
-                                oldWrapper.transform.GetChild(a).SetParent(newWrapper.transform);
+                                oldWrapper2.transform.GetChild(a).SetParent(newWrapper.transform);
                                 a--;
                             }
                             //destroy old wrapper if already connected.
-                            if (oldWrapper != null)
+                            if (oldWrapper2 != null)
                             {
-                                Destroy(oldWrapper);
+                                Destroy(oldWrapper2);
                             }
                         }
-                        else
-                        {
-                            secondaryConnector.transform.parent.SetParent(newWrapper.transform);
-                        }
-                        
+                    
                     }
 
 
                     //store old wrapper for deletion.
-                    if (baseConnector.transform.parent.parent != null)
+                    GameObject oldWrapper = baseConnector.transform.parent.parent.gameObject;
+                    //move the base object and all object in its old wrapper to the new Wrapper.
+                    for (int a = 0; a < oldWrapper.transform.childCount; a++)
                     {
-                        GameObject oldWrapper = baseConnector.transform.parent.parent.gameObject;
-                        //move the base object and all object in its old wrapper to the new Wrapper.
-                        for (int a = 0; a < oldWrapper.transform.childCount; a++)
-                        {
-                            oldWrapper.transform.GetChild(a).SetParent(newWrapper.transform);
-                            a--;
-                        }
-                        //destroy old wrapper if already connected.
-                        if (oldWrapper != null)
-                        {
-                            Destroy(oldWrapper);
-                        }
+                        oldWrapper.transform.GetChild(a).SetParent(newWrapper.transform);
+                        a--;
                     }
-                    else
+                    //destroy old wrapper if already connected.
+                    if (oldWrapper != null)
                     {
-                        //move the base object to the new Wrapper.
-                        baseConnector.transform.parent.SetParent(newWrapper.transform);
+                        Destroy(oldWrapper);
                     }
 
                 }

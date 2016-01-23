@@ -5,31 +5,35 @@ public class ConnectorControls : MonoBehaviour {
 
 	// Use this for initialization
 	public Material connectorSelected;
-	public Material connectorDeselected;
+    public Material connectorDeselected;
+    public Material connectorDisabled;
 
-	public ArrayList connectors = new ArrayList();
+    public ArrayList connectors = new ArrayList();
 	
 	ArrayList selectedConnectors;
+    ArrayList disabledConnectors;
 	
 	// Use this for initialization
 	void Start () {
-		selectedConnectors = new ArrayList();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		if (Input.GetMouseButtonDown(0)) {
+        selectedConnectors = new ArrayList();
+        disabledConnectors = new ArrayList();
+    }
+
+    // Update is called once per frame
+    void Update () {
+		if(Input.GetMouseButtonDown(0)) {
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit rh = new RaycastHit();
 			if (Physics.Raycast(ray, out rh)){
 				if(rh.collider.tag.Equals("PieceConnector")){
 					GameObject connector = rh.collider.gameObject;
 					if(selectedConnectors.Contains(connector)){
-						selectedConnectors.Remove(connector);
-						connector.GetComponent<MeshRenderer>().material = connectorDeselected;
-					}else{
-						selectedConnectors.Add(connector);
-						connector.GetComponent<MeshRenderer>().material = connectorSelected;
+                        setConnectorDeselected(connector);
+                        setDisabledConnectors();
+                    }
+                    else if(!disabledConnectors.Contains(connector)){
+                        setConnectorSelected(connector);
+                        setDisabledConnectors();
 					}
 				}
 			}
@@ -108,7 +112,69 @@ public class ConnectorControls : MonoBehaviour {
 		}
 	}
 
-	public void stop(){
+    public void setDisabledConnectors()
+    {
+        foreach(GameObject con in connectors)
+        {
+            if (!selectedConnectors.Contains(con)){
+                setConnectorDeselected(con);
+            }
+            foreach (GameObject sel in selectedConnectors)
+            {
+                if ((con.transform.forward + sel.transform.forward).magnitude > .1 && !selectedConnectors.Contains(con))
+                {
+                    setConnectorDisabled(con);
+                }
+            }
+        }
+    }
+
+
+    public void setConnectorDisabled(GameObject c)
+    {
+        if (selectedConnectors.Contains(c))
+        {
+            selectedConnectors.Remove(c);
+        }
+
+        if (!disabledConnectors.Contains(c))
+        {
+            disabledConnectors.Add(c);
+        }
+        c.GetComponent<MeshRenderer>().material = connectorDisabled;
+    }
+
+
+    public void setConnectorSelected(GameObject c)
+    {
+        if (disabledConnectors.Contains(c))
+        {
+            disabledConnectors.Remove(c);
+        }
+
+        if (!selectedConnectors.Contains(c))
+        {
+            selectedConnectors.Add(c);
+        }
+        c.GetComponent<MeshRenderer>().material = connectorSelected;
+    }
+
+    public void setConnectorDeselected(GameObject c)
+    {
+        if (disabledConnectors.Contains(c))
+        {
+            disabledConnectors.Remove(c);
+        }
+
+        if (selectedConnectors.Contains(c))
+        {
+            selectedConnectors.Remove(c);
+        }
+
+        c.GetComponent<MeshRenderer>().material = connectorDeselected;
+    }
+
+    public void stop(){
 		clearSelections ();
 		foreach (GameObject con in connectors) {
 			con.GetComponent<MeshRenderer>().enabled = false;
@@ -127,7 +193,12 @@ public class ConnectorControls : MonoBehaviour {
 		foreach(GameObject con in selectedConnectors){
 			con.GetComponent<MeshRenderer>().material = connectorDeselected;
 		}
-		selectedConnectors.Clear();
+        selectedConnectors.Clear();
+        foreach (GameObject con in disabledConnectors)
+        {
+            con.GetComponent<MeshRenderer>().material = connectorDeselected;
+        }
+        disabledConnectors.Clear();
 	}
 
 	public void disable(){

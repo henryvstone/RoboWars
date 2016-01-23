@@ -5,9 +5,9 @@ public class PieceControls : MonoBehaviour {
 	
 	// Use this for initialization
 	public Material assembliesSelected;
-	public Material assembliesDeselected;
-	
-	public ArrayList assemblies;
+    public Material assembliesDeselected;
+
+    public ArrayList assemblies;
 	
 	ArrayList selectedAssemblies;
 	
@@ -81,6 +81,14 @@ public class PieceControls : MonoBehaviour {
                 }
 			}
 		}
+
+//        if (Input.GetKeyDown(KeyCode.D))
+//        {
+//            for (int i = 0; i < selectedAssemblies.Count; i++)
+//            {
+//                Instantiate((GameObject)selectedAssemblies[i], new Vector3(0,0,0), Quaternion.identity);
+//            }
+//        }
 
         //left mo
 		if (Input.GetMouseButton (1)) {

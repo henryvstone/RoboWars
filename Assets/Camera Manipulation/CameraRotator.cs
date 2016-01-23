@@ -28,5 +28,20 @@ public class CameraRotator : MonoBehaviour {
 		if (Input.GetKey (KeyCode.Period)) {
 			distance *= 1 - Time.deltaTime;
 		}
-	}
+
+
+        //left mo
+        if (Input.GetMouseButton(2))
+        {
+            float deltaX = Input.mousePosition.x - lastPosition.x;
+            angle += deltaX / 100;
+
+            float deltaY = Input.mousePosition.y - lastPosition.y;
+            verticalAngle -= deltaY / 100;
+        }
+
+        lastPosition = Input.mousePosition;
+    }
+
+    Vector2 lastPosition;
 }

@@ -2,8 +2,9 @@
 using System.Collections;
 
 public class ConnectorGenerator : MonoBehaviour {
-	public Vector3[] positionsToBeGenerated;
-	public GameObject ConnectorModel;
+    public Vector3[] positionsToBeGenerated;
+    public Vector3[] connectorNormals;
+    public GameObject ConnectorModel;
 
 	public ConnectorControls cc;
 
@@ -17,8 +18,13 @@ public class ConnectorGenerator : MonoBehaviour {
 			GameObject c = (GameObject) Instantiate (ConnectorModel);
 			c.transform.parent = this.transform;
 			c.transform.localPosition = positionsToBeGenerated[i];
+            Vector3 normal = connectorNormals[i].normalized;
 
-			cc.connectors.Add(c);
+            c.transform.Rotate(-Mathf.Asin(normal.y) * Mathf.Rad2Deg, Mathf.Atan2(normal.x, normal.z) * 180 / Mathf.PI, 0);
+
+            //Mathf.Atan2(normal.x, normal.z) * 180 / Mathf.PI
+
+            cc.connectors.Add(c);
 		}
 	}
 	
